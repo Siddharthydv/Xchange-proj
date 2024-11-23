@@ -1,5 +1,5 @@
 import { CANCEL_ORDER, CREATE_ORDER, GET_DEPTH, GET_OPEN_ORDERS, ON_RAMP } from "."
-
+const CREATE_USER="CREATE_USER"
 export type MessageToEngine = {
     type: typeof CREATE_ORDER,
     data: {
@@ -33,4 +33,11 @@ export type MessageToEngine = {
         userId: string,
         market: string,
     }
+}|{
+    type:typeof CREATE_USER,
+    data:{
+        userId:Number,
+        username:string,
+    }
 }
+

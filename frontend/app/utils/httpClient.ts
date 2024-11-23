@@ -3,7 +3,9 @@ import { Depth, KLine, Ticker, Trade } from "./types";
 
 // const BASE_URL = "https://exchange-proxy.100xdevs.com/api/v1";
 const BASE_URL = "http://localhost:3000/api/v1";
-
+export async function placeOrder(market:string,userId:string,price:string,side:string,quantity:string){
+         const response=await axios.post(`${BASE_URL}/order`,{price:price,side:side,quantity:quantity,market:market},{withCredentials:true});
+}
 export async function getTicker(market: string): Promise<Ticker> {
     const tickers = await getTickers();
     console.log("tickers=",tickers);
@@ -41,3 +43,26 @@ export async function getKlines(market: string, interval: string, startTime: num
       });    const data: KLine[] = response.data;
     return data.sort((x, y) => (Number(x.end) < Number(y.end) ? -1 : 1));
 }
+export async function signIn(email:string,password:string){
+
+   const data= await axios.post(`${BASE_URL}/signIn`,{email:email,password:password},{withCredentials:true});
+   return data.data
+}
+
+export async function orderHistory(market:string){
+    const response=await axios.get(`${BASE_URL}/order/history?market=${market}`,{withCredentials:true});
+    console.log(response.data); 
+    return response.data
+}
+export async function fillOrders(market:string){
+    const response=await axios.get(`${BASE_URL}/order/fills?market=${market}`,{withCredentials:true})
+    console.log(response.data)
+    return response.data
+}
+
+export async function openOrders(market:string){
+    const response=await axios.get(`${BASE_URL}/order/open?market=${market}`,{withCredentials:true})
+    return response.data
+}
+
+

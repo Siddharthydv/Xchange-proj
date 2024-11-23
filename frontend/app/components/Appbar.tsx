@@ -3,12 +3,21 @@
 import { usePathname } from "next/navigation";
 import { PrimaryButton, SuccessButton } from "./core/Button"
 import { useRouter } from "next/navigation";
+import { UserContext, UserProvider, useUser } from "./UserContext";
+import { useContext, useState } from "react";
 
 export const Appbar = () => {
     const route = usePathname();
     const router = useRouter()
-
-    return <div className="text-white border-b border-slate-800">
+    const User=useContext(UserContext)
+    console.log("appbar",User)
+    function Logout(){
+        console.log("logout")
+        User?.setUser(null);
+         document.cookie = `token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+        router.push('/');
+    }
+    return<div className="text-white border-b border-slate-800">
         <div className="flex justify-between items-center p-2">
             <div className="flex">
                 <div className={`text-xl pl-4 flex flex-col justify-center cursor-pointer text-white`} onClick={() => router.push('/')}>
@@ -23,10 +32,14 @@ export const Appbar = () => {
             </div>
             <div className="flex">
                 <div className="p-2 mr-2">
-                    <SuccessButton>Deposit</SuccessButton>
-                    <PrimaryButton>Withdraw</PrimaryButton>
+
+               {!User?.user &&(<><SuccessButton>SignUp</SuccessButton>
+                    <PrimaryButton>SignIn</PrimaryButton></>)}
+                {User?.user &&(<SuccessButton onClick={Logout} >LogOut</SuccessButton>)}
                 </div>
             </div>
         </div>
     </div>
+
 }
+

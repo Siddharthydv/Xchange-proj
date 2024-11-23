@@ -3,7 +3,7 @@ import { ChartManager } from "../utils/ChartManager";
 import { getKlines } from "../utils/httpClient";
 import { KLine } from "../utils/types";
 
-export function TradeView({market,}: {market: string;}) {
+export function TradeView({market}: {market: string;}) {
   const chartRef = useRef<HTMLDivElement>(null);
   const chartManagerRef = useRef<ChartManager>(null);
 

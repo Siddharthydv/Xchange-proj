@@ -82,12 +82,14 @@ export function Depth({ market }: {market: string}) {
         }
     }, [])
     
-    return <div className="flex-col border border-green-400 h-1/2">
+    return <div className="flex-col flex-1  overflow-hidden  ">
         <TableHeader />
-        <div className="flex-col flex-grow border border-red-500 ">
+        <div className="flex-col h-full overflow-hidden  flex-grow  space-y-">
+            <div className="h-full flex-col space-y-2">
         {asks && <AskTable asks={asks} />}
         {price && <div>{price}</div>}
         {bids && <BidTable bids={bids} />}
+            </div>
         </div>
       
     </div>

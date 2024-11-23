@@ -25,7 +25,7 @@ export function Trades({market}:{market:string}){
       }
     },[])
     return (
-        <div>
+        <div className="overflow-y-auto">
           <div className="flex flex-row border-b-1 border-b-borderColor w-full flex-1"><p className="w-[33.3%] px-1 text-left text-xs font-semibold text-baseTextMedEmphasis">Price (USDC)</p><p className="w-[33.3%] px-1 text-right text-xs font-semibold text-baseTextMedEmphasis">Qty (SOL)</p></div>
           {trades &&
             trades.map((trade, index) => {

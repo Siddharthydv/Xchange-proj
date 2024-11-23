@@ -25,7 +25,23 @@ export async function orderTable() {
     console.log("orderTable error", error);
   }
 }
-
+export async function userTable(){
+  await client.connect();
+  const query=`
+        DROP TABLE IF EXISTS userTable;
+        CREATE TABLE IF NOT EXISTS userTable (
+        userId INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        email VARCHAR(20) UNIQUE NOT NULL,
+        username VARCHAR(20) NOT NULL,
+        password VARCHAR(20) NOT NULL
+  );`
+  try{
+    await client.query(query);
+    console.log("usertable created");
+  }catch(e){
+    console.log("usertTable",e);
+  }
+}
 async function initializeDB() {
   const markets = ["SOL","BTC"];
   for(const market of markets){
@@ -125,9 +141,10 @@ async function initializeTrade() {
 
 async function main() {
   try {
-    await orderTable();
-    await initializeDB();
-    await initializeTrade();
+    // await orderTable();
+    await userTable();
+    // await initializeDB();
+    // await initializeTrade();
   } finally {
     await client.end();
     console.log("Database connection closed");

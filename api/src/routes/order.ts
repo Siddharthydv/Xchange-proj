@@ -2,6 +2,7 @@ import { Router } from "express";
 import { RedisManager } from "../RedisManager";
 import { CREATE_ORDER, CANCEL_ORDER, ON_RAMP, GET_OPEN_ORDERS } from "../types";
 import { Client } from "pg";
+import { jwtVerify } from "../jwtVerify";
 export const orderRouter = Router();
 const client = new Client({
     user: 'your_user',
@@ -11,6 +12,11 @@ const client = new Client({
     port: 5432,
 });
 client.connect();
+orderRouter.use(jwtVerify)
+orderRouter.get('/dummy',(req,res)=>{
+    return   res.json(req.body.userId);
+  
+})
 orderRouter.post("/", async (req, res) => {
     const { market, price, quantity, side, userId } = req.body;
     console.log({ market, price, quantity, side, userId })
@@ -41,30 +47,32 @@ orderRouter.delete("/", async (req, res) => {
 });
 
 orderRouter.get("/open", async (req, res) => {
+   
     const response = await RedisManager.getInstance().sendAndAwait({
         type: GET_OPEN_ORDERS,
         data: {
-            userId: req.query.userId as string,
+            userId: req.body.userId as string,
             market: req.query.market as string
         }
     });
+    console.log("open",response.payload)
     res.json(response.payload);
 });
 
 orderRouter.get("/history",async(req,res)=>{
-    console.log(req.query.userId)
+    console.log("history",req.body.userId)
     const query=`SELECT * FROM orderTable 
                  WHERE userId=$1 AND market=$2`
-    const values=[req.query.userId,req.query.market];
+    const values=[req.body.userId,req.query.market];
     const response =await client.query(query,values);
     res.json(response.rows);
 })
 
 orderRouter.get("/fills",async (req,res)=>{
-    console.log(req.query.userId)
+    console.log(req.body.userId)
     const query=`SELECT * FROM orderTable 
                  WHERE userId=$1 AND executedQty=quantity::Integer`
-    const values=[req.query.userId];
+    const values=[req.body.userId];
     const response =await client.query(query,values);
     res.json(response.rows);
 })

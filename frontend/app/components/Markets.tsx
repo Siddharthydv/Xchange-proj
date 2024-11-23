@@ -9,7 +9,10 @@ export const Markets = () => {
   const [tickers, setTickers] = useState<Ticker[]>();
 
   useEffect(() => {
+    async function A(){
     getTickers().then((m) => setTickers(m));
+    }
+    A();
   }, []);
 
   return (

@@ -1,8 +1,9 @@
 import fs from "fs";
 import { RedisManager } from "../RedisManager";
 import { ORDER_UPDATE, TRADE_ADDED } from "../types/index";
-import { CANCEL_ORDER, CREATE_ORDER, GET_DEPTH, GET_OPEN_ORDERS, MessageFromApi, ON_RAMP } from "../types/fromApi";
+import { CREATE_USER,CANCEL_ORDER, CREATE_ORDER, GET_DEPTH, GET_OPEN_ORDERS, MessageFromApi, ON_RAMP } from "../types/fromApi";
 import { Fill, Order, Orderbook } from "./Orderbook";
+import { response } from "express";
 
 //TODO: Avoid floats everywhere, use a decimal similar to the PayTM project for every currency
 export const BASE_CURRENCY = "USDC";
@@ -34,7 +35,7 @@ export class Engine {
             this.balances = new Map(snapshotSnapshot.balances);
         } else {
             this.orderbooks = [new Orderbook(`SOL`, [], [], 0, 0)];
-            this.setBaseBalances();
+            // this.setBaseBalances();
         }
         setInterval(() => {
             this.saveSnapshot();
@@ -50,6 +51,7 @@ export class Engine {
     }
 
     process({ message, clientId }: {message: MessageFromApi, clientId: string}) {
+        console.log(message)
         switch (message.type) {
             case CREATE_ORDER:
                 try {
@@ -169,6 +171,16 @@ export class Engine {
                     });
                 }
                 break;
+            case CREATE_USER:
+                    console.log("createuser")
+                    const userid=message.data.userid;
+                    const response:Number=this.addNewUser(userid);
+                    RedisManager.getInstance().sendToApi(clientId,{
+                        type:"CREATE_USER",
+                        payload:response
+                    })
+                break;
+
         }
     }
 
@@ -412,30 +424,43 @@ export class Engine {
         }
     }
 
-    setBaseBalances() {
-        this.balances.set("1", {
-            [BASE_CURRENCY]: {
-                available: 10000000,
-                locked: 0
-            },
-            "SOL": {
-                available: 10000000,
-                locked: 0
-            }
-        });
+    // setBaseBalances() {
+    //     this.balances.set("1", {
+    //         [BASE_CURRENCY]: {
+    //             available: 10000000,
+    //             locked: 0
+    //         },
+    //         "SOL": {
+    //             available: 10000000,
+    //             locked: 0
+    //         }
+    //     });
 
-        this.balances.set("2", {
-            [BASE_CURRENCY]: {
-                available: 10000000,
-                locked: 0
-            },
-            "SOL": {
-                available: 10000000,
-                locked: 0
-            }
-        });
+    //     this.balances.set("2", {
+    //         [BASE_CURRENCY]: {
+    //             available: 10000000,
+    //             locked: 0
+    //         },
+    //         "SOL": {
+    //             available: 10000000,
+    //             locked: 0
+    //         }
+    //     });
 
-        this.balances.set("5", {
+    //     this.balances.set("5", {
+    //         [BASE_CURRENCY]: {
+    //             available: 10000000,
+    //             locked: 0
+    //         },
+    //         "SOL": {
+    //             available: 10000000,
+    //             locked: 0
+    //         }
+    //     });
+    // }
+    addNewUser(userId:Number){
+        console.log('new user',userId)
+        this.balances.set(String(userId),{
             [BASE_CURRENCY]: {
                 available: 10000000,
                 locked: 0
@@ -444,7 +469,7 @@ export class Engine {
                 available: 10000000,
                 locked: 0
             }
-        });
+        })
+        return userId;
     }
-
 }

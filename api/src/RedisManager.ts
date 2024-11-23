@@ -2,7 +2,7 @@
 import { RedisClientType, createClient } from "redis";
 import { MessageFromOrderbook } from "./types";
 import { MessageToEngine } from "./types/to";
-
+const CREATE_USER="CREATE_USER"
 export class RedisManager {
     private client: RedisClientType;
     private publisher: RedisClientType;
@@ -23,8 +23,10 @@ export class RedisManager {
     }
 
     public sendAndAwait(message: MessageToEngine) {
+       
         return new Promise<MessageFromOrderbook>((resolve) => {
-            const id = this.getRandomClientId();
+            
+            const id =this.getRandomClientId();
             this.client.subscribe(id, (message) => {
                 this.client.unsubscribe(id);
                 resolve(JSON.parse(message));

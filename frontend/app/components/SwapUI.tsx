@@ -1,11 +1,34 @@
-"use client";
+"use client"
+import { useContext, useEffect, } from "react";
+import { User, UserContext, UserContextType } from "@/app/components/UserContext";
+import axios from "axios";
 import { useState } from "react";
-
+import { useUser } from "@/app/components/UserContext";
+import { placeOrder } from "../utils/httpClient";
+import { useRouter } from "next/navigation";
+const BASE_URL='http://localhost:3000/api/v1'
 export function SwapUI({ market }: {market: string}) {
     const [amount, setAmount] = useState('');
     const [activeTab, setActiveTab] = useState('buy');
     const [type, setType] = useState('limit');
+    const router=useRouter();
+    const loggedIn=useUser();
 
+    
+
+
+    const onClickHandler=async ()=>{
+        
+        const price=(document.getElementById("price") as HTMLInputElement).value;
+        const userId="2";
+        const side=activeTab;
+        const quantity=(document.getElementById("quantity") as HTMLInputElement).value
+        placeOrder(market,userId,price,side,quantity);
+        
+    }
+    // const SignHandler=async ()=>{
+    //     console.log('Sign in')
+    // }
     return <div>
         <div className="flex flex-col">
             <div className="flex flex-row h-[60px]">
@@ -33,7 +56,7 @@ export function SwapUI({ market }: {market: string}) {
                                 Price
                             </p>
                             <div className="flex flex-col relative">
-                                <input step="0.01" placeholder="0" className="h-12 rounded-lg border-2 border-solid border-baseBorderLight bg-[var(--background)] pr-12 text-right text-2xl leading-9 text-[$text] placeholder-baseTextMedEmphasis ring-0 transition focus:border-accentBlue focus:ring-0" type="text" defaultValue="134.38" />
+                                <input id="price" step="0.01" placeholder="0" className="h-12 rounded-lg border-2 border-solid border-baseBorderLight bg-[var(--background)] pr-12 text-right text-2xl leading-9 text-[$text] placeholder-baseTextMedEmphasis ring-0 transition focus:border-accentBlue focus:ring-0" type="text"  />
                                 <div className="flex flex-row absolute right-1 top-1 p-2">
                                     <div className="relative">
                                         <img src="/usdc.webp" className="w-6 h-6" />
@@ -47,7 +70,7 @@ export function SwapUI({ market }: {market: string}) {
                             Quantity
                         </p>
                         <div className="flex flex-col relative">
-                            <input step="0.01" placeholder="0" className="h-12 rounded-lg border-2 border-solid border-baseBorderLight bg-[var(--background)] pr-12 text-right text-2xl leading-9 text-[$text] placeholder-baseTextMedEmphasis ring-0 transition focus:border-accentBlue focus:ring-0" type="text" defaultValue="123" />
+                            <input id="quantity" step="0.01" placeholder="0" className="h-12 rounded-lg border-2 border-solid border-baseBorderLight bg-[var(--background)] pr-12 text-right text-2xl leading-9 text-[$text] placeholder-baseTextMedEmphasis ring-0 transition focus:border-accentBlue focus:ring-0" type="text" defaultValue="123" />
                             <div className="flex flex-row absolute right-1 top-1 p-2">
                                 <div className="relative">
                                     <img src="/sol.webp" className="w-6 h-6" />
@@ -72,7 +95,9 @@ export function SwapUI({ market }: {market: string}) {
                             </div>
                         </div>
                     </div>
-                    <button type="button" className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" data-rac="">Buy</button>
+                   {loggedIn?.user && (<button type="button" onClick={onClickHandler} className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" data-rac="">Buy</button>)}
+                   {!loggedIn?.user && (<button type="button" onClick={()=>{router.push('/signin')}} className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" data-rac="">signIn</button>)}
+
                     <div className="flex justify-between flex-row mt-1">
                         <div className="flex flex-row gap-2">
                             <div className="flex items-center">
@@ -110,7 +135,9 @@ export function SwapUI({ market }: {market: string}) {
                         </div>
                     </div>
                    
-                    <button type="button" className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" data-rac="">Buy</button>
+                    {loggedIn?.user && (<button type="button" onClick={onClickHandler} className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" data-rac="">Buy</button>)}
+                    {!loggedIn?.user && (<button type="button" onClick={SignHandler} className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" data-rac="">signuIn</button>)}
+
                     <div className="flex justify-between flex-row mt-1">
                         <div className="flex flex-row gap-2">
                             <div className="flex items-center">
@@ -155,7 +182,7 @@ function BuyButton({ activeTab, setActiveTab }: { activeTab: string, setActiveTa
 }
 
 function SellButton({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: any }) {
-    return <div className={`flex flex-col mb-[-2px] flex-1 cursor-pointer justify-center border-b-2 p-4 ${activeTab === 'sell' ? 'border-b-redBorder bg-redBackgroundTransparent' : 'border-b-baseBorderMed hover:border-b-baseBorderFocus'}`} onClick={() => setActiveTab('sell')}>
+    return <div className={`flex flex-col mb-[-2px] flex-1 cursor-pointer justify-center border-b-2 p-4 ${activeTab === 'ask' ? 'border-b-redBorder bg-redBackgroundTransparent' : 'border-b-baseBorderMed hover:border-b-baseBorderFocus'}`} onClick={() => setActiveTab('ask')}>
         <p className="text-center text-sm font-semibold text-redText">
             Sell
         </p>
