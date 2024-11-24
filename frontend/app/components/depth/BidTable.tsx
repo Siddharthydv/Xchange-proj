@@ -3,6 +3,7 @@ export const BidTable = ({ bids }: {bids: [string, string][]}) => {
     let currentTotal = 0; 
     const relevantBids = bids.slice(0, 15);
     const bidsWithTotal: [string, string, number][] = relevantBids.map(([price, quantity]) => [price, quantity, currentTotal += Number(quantity)]);
+    bidsWithTotal.sort((a, b) => a[0].localeCompare(b[0]));
     const maxTotal = relevantBids.reduce((acc, [_, quantity]) => acc + Number(quantity), 0);
 
     return <div className=" space-y-2 rounded-sm overflow-scroll scrollbar-none h-1/2 ">
@@ -32,7 +33,7 @@ function Bid({ price, quantity, total, maxTotal }: { price: string, quantity: st
             transition: "width 0.3s ease-in-out",
             }}
         ></div>
-            <div className={`flex justify-between items-center text-xs w-full h-5 rounded-md`}>
+            <div className={`flex justify-between  text-xs w-full h-5 rounded-md`}>
                 <div>
                     {price}
                 </div>

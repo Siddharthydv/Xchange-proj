@@ -71,7 +71,7 @@ export function Fills({market}:{market:string}){
         </th>
     </tr>
         </thead>
-        <tbody className="gap-2 divide-y  divide-baseBorderLight">
+        <tbody className="gap-2 divide-y  divide-black">
             {data?.map(record=>{
                 return <tr className="hover:bg-white/4">
                 {/* Asset Column */}
@@ -91,7 +91,7 @@ export function Fills({market}:{market:string}){
                             decoding="async"
                             data-nimg="1"
                             className=""
-                            src="https://backpack.exchange/coins/aave.svg"
+                            src={market==="SOL_USDC"?'/sol.webp':'/btc.webp'}
                             style={{ color: "transparent" }}
                             />
                         </div>

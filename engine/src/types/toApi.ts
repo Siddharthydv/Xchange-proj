@@ -1,3 +1,4 @@
+import { UserBalance } from "../trade/Engine";
 import { Order } from "../trade/Orderbook";
 
 export const CREATE_ORDER = "CREATE_ORDER";
@@ -36,4 +37,7 @@ export type MessageToApi = {
 }|{
     type:"CREATE_USER",
     payload:Number
+}|{
+    type:"GET_ASSETS",
+    payload:UserBalance
 }

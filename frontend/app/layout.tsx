@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body >
+      <body  className="flex flex-col h-screen">
       
         <UserProvider><Appbar/> {children}</UserProvider>
        

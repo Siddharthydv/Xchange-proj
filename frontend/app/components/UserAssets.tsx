@@ -3,6 +3,7 @@ import { OrderHistory } from "./assets/OrderHistory";
 import { OpenOrders } from "./assets/OpenOrders";
 import { Fills } from "./assets/Fills";
 import { useUser } from "./UserContext";
+import { Assets } from "./assets/Assets";
 
 export function UserAssets({market}:{market:string}){
   const [column,setcolumn]=useState("Assets");
@@ -39,6 +40,7 @@ export function UserAssets({market}:{market:string}){
               <div
                 className="flex flex-col items-center justify-center flex-1 gap-6 rounded-xl bg-baseBackgroundL2 "
               >
+            {column==="Assets"&&user?.user &&(<Assets/>)}
             {column==="OrderHistory"&&user?.user && (<OrderHistory market={market}/>)}
             {column==="FillHistory" &&  (<Fills market={market}/>) }
             {column==="OpenOrders" &&   (<OpenOrders market={market}/>)}

@@ -1,5 +1,6 @@
 import { CANCEL_ORDER, CREATE_ORDER, GET_DEPTH, GET_OPEN_ORDERS, ON_RAMP } from "."
 const CREATE_USER="CREATE_USER"
+const GET_ASSETS="GET_ASSETS"
 export type MessageToEngine = {
     type: typeof CREATE_ORDER,
     data: {
@@ -38,6 +39,11 @@ export type MessageToEngine = {
     data:{
         userId:Number,
         username:string,
+    }
+}|{
+    type:typeof GET_ASSETS,
+    data:{
+        userId:string
     }
 }
 

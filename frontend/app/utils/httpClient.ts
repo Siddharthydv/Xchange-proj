@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Depth, KLine, Ticker, Trade } from "./types";
+import { basename } from "path";
 
 // const BASE_URL = "https://exchange-proxy.100xdevs.com/api/v1";
 const BASE_URL = "http://localhost:3000/api/v1";
@@ -20,7 +21,23 @@ export async function getTicker(market: string): Promise<Ticker> {
 export async function getTickers(): Promise<Ticker[]> {
     const response = await axios.get(`${BASE_URL}/tickers`);
     console.log(response.data)
-    return response.data;
+    const data=response.data;
+    const markets=["SOL_USDC","BTC_USDC"]
+    markets.forEach(market=>{
+        const exists=data.find(d=>market===d.symbol)
+        if(!exists)
+            data.push({ "firstprice": "0",
+                "high":"0",
+                "lastprice": "0",
+                "low": "0",
+                "pricechange": "0",
+                "pricechangepercent": "0",
+                "quotevolume": "0",
+                "symbol": `${market}`,
+                "trades": "0",
+                "volume": "0"})
+    })
+   return data
 }
 
 
@@ -66,3 +83,13 @@ export async function openOrders(market:string){
 }
 
 
+export async function getAssets(){
+    const response=await axios.get(`${BASE_URL}/order/assets`,{withCredentials:true})
+    return response.data;
+}
+
+export async function signup(email:string,password:string,username:string){
+    const response=await axios.post(`${BASE_URL}/signUp`,{email,password,username})
+    console.log(response)
+    return response.data
+}

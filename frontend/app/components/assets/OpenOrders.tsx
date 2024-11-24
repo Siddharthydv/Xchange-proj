@@ -1,7 +1,7 @@
 import { openOrders } from "@/app/utils/httpClient";
 import { useEffect, useState } from "react";
 type OpenOrders={
-    executedqty: string
+    filled: string
     market: string
     orderid: string
     price: string
@@ -71,9 +71,9 @@ export function OpenOrders({market}:{market:string}){
         </th>
     </tr>
         </thead>
-        <tbody className="gap-2 divide-y  divide-baseBorderLight">
+        <tbody className="gap-10 divide-y divide-black">
             {data?.map(record=>{
-                return <tr className="hover:bg-white/4">
+                return <tr className="  hover:bg-white/4">
                 {/* Asset Column */}
                 <td className="w-[5%] px-1 py-2 text-sm tabular-nums">
                     <a href="/trade/AAVE_USDC">
@@ -91,14 +91,14 @@ export function OpenOrders({market}:{market:string}){
                             decoding="async"
                             data-nimg="1"
                             className=""
-                            src="https://backpack.exchange/coins/aave.svg"
+                            src={market==="SOL_USDC"?'/sol.webp':'/btc.webp'}
                             style={{ color: "transparent" }}
                             />
                         </div>
                         </div>
                         <div className="ml-2 flex flex-col">
                         <p className="whitespace-nowrap text-base font-medium text-baseTextHighEmphasis">
-                            {record.market}
+                            {market}
                         </p>
                         
                         </div>
@@ -129,7 +129,7 @@ export function OpenOrders({market}:{market:string}){
                 </td>
                 <td className="text-right w-[20%] px-1 py-2 text-sm tabular-nums">
                     <div className="flex items-end flex-col">
-                    <p className="font-medium text-baseTextHighEmphasis">{record.executedqty}</p>
+                    <p className="font-medium text-baseTextHighEmphasis">{record.filled}</p>
                     </div>
                 </td>
                 {/* Actions Column */}

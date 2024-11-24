@@ -4,17 +4,26 @@ import { User, UserContext, UserContextType } from "@/app/components/UserContext
 import axios from "axios";
 import { useState } from "react";
 import { useUser } from "@/app/components/UserContext";
-import { placeOrder } from "../utils/httpClient";
+import { getAssets, placeOrder } from "../utils/httpClient";
 import { useRouter } from "next/navigation";
-const BASE_URL='http://localhost:3000/api/v1'
 export function SwapUI({ market }: {market: string}) {
     const [amount, setAmount] = useState('');
     const [activeTab, setActiveTab] = useState('buy');
     const [type, setType] = useState('limit');
     const router=useRouter();
     const loggedIn=useUser();
-
-    
+    const user=useUser()
+    useEffect(()=>{
+        async function A(){
+            if(user?.user){
+            const response=await getAssets();
+            console.log(response)
+            setAmount(response["USDC"].available)
+            }
+        }
+        A();
+    },[market])
+   
 
 
     const onClickHandler=async ()=>{
@@ -39,7 +48,7 @@ export function SwapUI({ market }: {market: string}) {
                 <div className="px-3">
                     <div className="flex flex-row flex-0 gap-5 undefined">
                         <LimitButton type={type} setType={setType} />
-                        <MarketButton type={type} setType={setType} />                       
+                        {/* <MarketButton type={type} setType={setType} />                        */}
                     </div>
                 </div>
              {type==='limit' &&  (
@@ -48,7 +57,7 @@ export function SwapUI({ market }: {market: string}) {
                         <div className="flex flex-col gap-3">
                             <div className="flex items-center justify-between flex-row">
                                 <p className="text-xs font-normal text-baseTextMedEmphasis">Available Balance</p>
-                                <p className="font-medium text-xs text-baseTextHighEmphasis">36.94 USDC</p>
+                             {user?.user &&  <p className="font-medium text-xs text-baseTextHighEmphasis">{amount} USDC</p>}
                             </div>
                         </div>
                         <div className="flex flex-col gap-2">
@@ -70,29 +79,17 @@ export function SwapUI({ market }: {market: string}) {
                             Quantity
                         </p>
                         <div className="flex flex-col relative">
-                            <input id="quantity" step="0.01" placeholder="0" className="h-12 rounded-lg border-2 border-solid border-baseBorderLight bg-[var(--background)] pr-12 text-right text-2xl leading-9 text-[$text] placeholder-baseTextMedEmphasis ring-0 transition focus:border-accentBlue focus:ring-0" type="text" defaultValue="123" />
+                            <input id="quantity" step="0.01" placeholder="0" className="h-12 rounded-lg border-2 border-solid border-baseBorderLight bg-[var(--background)] pr-12 text-right text-2xl leading-9 text-[$text] placeholder-baseTextMedEmphasis ring-0 transition focus:border-accentBlue focus:ring-0" type="text" defaultValue="0" />
                             <div className="flex flex-row absolute right-1 top-1 p-2">
                                 <div className="relative">
-                                    <img src="/sol.webp" className="w-6 h-6" />
+                                    <img src={market==="SOL_USDC"?'/sol.webp':'/btc.webp'} className="w-6 h-6" />
                                 </div>
                             </div>
                         </div>
                         <div className="flex justify-end flex-row">
-                            <p className="font-medium pr-2 text-xs text-baseTextMedEmphasis">≈ 0.00 USDC</p>
                         </div>
                         <div className="flex justify-center flex-row mt-2 gap-3">
-                            <div className="flex items-center justify-center flex-row rounded-full px-[16px] py-[6px] text-xs cursor-pointer bg-baseBackgroundL2 hover:bg-baseBackgroundL3">
-                                25%
-                            </div>
-                            <div className="flex items-center justify-center flex-row rounded-full px-[16px] py-[6px] text-xs cursor-pointer bg-baseBackgroundL2 hover:bg-baseBackgroundL3">
-                                50%
-                            </div>
-                            <div className="flex items-center justify-center flex-row rounded-full px-[16px] py-[6px] text-xs cursor-pointer bg-baseBackgroundL2 hover:bg-baseBackgroundL3">
-                                75%
-                            </div>
-                            <div className="flex items-center justify-center flex-row rounded-full px-[16px] py-[6px] text-xs cursor-pointer bg-baseBackgroundL2 hover:bg-baseBackgroundL3">
-                                Max
-                            </div>
+                            
                         </div>
                     </div>
                    {loggedIn?.user && (<button type="button" onClick={onClickHandler} className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" data-rac="">Buy</button>)}
@@ -100,18 +97,11 @@ export function SwapUI({ market }: {market: string}) {
 
                     <div className="flex justify-between flex-row mt-1">
                         <div className="flex flex-row gap-2">
-                            <div className="flex items-center">
-                                <input className="form-checkbox rounded border border-solid border-baseBorderMed bg-base-950 font-light text-transparent shadow-none shadow-transparent outline-none ring-0 ring-transparent checked:border-baseBorderMed checked:bg-base-900 checked:hover:border-baseBorderMed focus:bg-base-900 focus:ring-0 focus:ring-offset-0 focus:checked:border-baseBorderMed cursor-pointer h-5 w-5" id="postOnly" type="checkbox" data-rac="" />
-                                <label className="ml-2 text-xs">Post Only</label>
-                            </div>
-                            <div className="flex items-center">
-                                <input className="form-checkbox rounded border border-solid border-baseBorderMed bg-base-950 font-light text-transparent shadow-none shadow-transparent outline-none ring-0 ring-transparent checked:border-baseBorderMed checked:bg-base-900 checked:hover:border-baseBorderMed focus:bg-base-900 focus:ring-0 focus:ring-offset-0 focus:checked:border-baseBorderMed cursor-pointer h-5 w-5" id="ioc" type="checkbox" data-rac="" />
-                                <label className="ml-2 text-xs">IOC</label>
-                            </div>
+                           
                         </div>
                 </div>
             </div>)}
-            {type==='market' && (
+            {/* {type==='market' && (
                 <div className="flex flex-col px-3">
                     <div className="flex flex-col flex-1 gap-3 text-baseTextHighEmphasis">
                         <div className="flex flex-col gap-3">
@@ -136,7 +126,7 @@ export function SwapUI({ market }: {market: string}) {
                     </div>
                    
                     {loggedIn?.user && (<button type="button" onClick={onClickHandler} className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" data-rac="">Buy</button>)}
-                    {!loggedIn?.user && (<button type="button" onClick={SignHandler} className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" data-rac="">signuIn</button>)}
+                    {!loggedIn?.user && (<button type="button" onClick={()=>{router.push('/signin')}} className="font-semibold  focus:ring-blue-200 focus:none focus:outline-none text-center h-12 rounded-xl text-base px-4 py-2 my-4 bg-greenPrimaryButtonBackground text-greenPrimaryButtonText active:scale-98" data-rac="">signuIn</button>)}
 
                     <div className="flex justify-between flex-row mt-1">
                         <div className="flex flex-row gap-2">
@@ -151,7 +141,7 @@ export function SwapUI({ market }: {market: string}) {
                         </div>
                 </div>
             </div>)
-            }
+            } */}
         </div>
     </div>
 </div>

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Ticker } from "../utils/types";
 import { getTickers } from "../utils/httpClient";
 import { useRouter } from "next/navigation";
-
+import SolImage from '../../public/sol.webp'
 export const Markets = () => {
   const [tickers, setTickers] = useState<Ticker[]>();
 
@@ -43,7 +43,7 @@ function MarketRow({ market }: { market: Ticker }) {
               <div className="relative">
                 <img
                   alt={market.symbol}
-                  src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVvBqZC_Q1TSYObZaMvK0DRFeHZDUtVMh08Q&s"}
+                  src={market.symbol==="SOL_USDC"?'/sol.webp':'/btc.webp'}
                   loading="lazy"
                   width="40"
                   height="40"

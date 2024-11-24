@@ -26,6 +26,8 @@ export async function signIn(req:Request,res:Response){
             return;
         }
         console.log(payloads.rows)
+        if(!payloads)
+          return res.sendStatus(404).json("user does not exists")
         const token = jwt.sign(payloads?.rows?.[0],"secret",options)
         res.cookie('token', token, {
           httpOnly: false,

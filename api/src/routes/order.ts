@@ -76,3 +76,15 @@ orderRouter.get("/fills",async (req,res)=>{
     const response =await client.query(query,values);
     res.json(response.rows);
 })
+
+
+orderRouter.get("/assets",async (req,res)=>{
+    const userId=req.body.userId;
+    const response=await RedisManager.getInstance().sendAndAwait({
+        type:"GET_ASSETS",
+        data:{
+            userId:String(userId)
+        }
+    })
+    res.json(response.payload)
+})

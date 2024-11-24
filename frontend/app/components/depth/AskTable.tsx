@@ -1,13 +1,25 @@
 
+import { useRef,useEffect } from "react";
 export const AskTable = ({ asks }: { asks: [string, string][] }) => {
+
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Scroll to the bottom on component mount
+    if (divRef.current) {
+      divRef.current.scrollTop = divRef.current.scrollHeight;
+    }
+  }, []);
+
     let currentTotal = 0;
     const relevantAsks = asks.slice(0, 15);
     relevantAsks.reverse();
     const asksWithTotal: [string, string, number][] = relevantAsks.map(([price, quantity]) => [price, quantity, currentTotal += Number(quantity)]);
+   asksWithTotal.sort((a, b) => a[0].localeCompare(b[0]));
     const maxTotal = relevantAsks.reduce((acc, [_, quantity]) => acc + Number(quantity), 0);
     asksWithTotal.reverse();
 
-    return <div className=" space-y-2  h-1/2  overflow-scroll scrollbar-none">
+    return <div ref={divRef} className=" space-y-2  h-1/2  overflow-scroll scrollbar-none">
         {asksWithTotal.map(([price, quantity, total]) => <Ask maxTotal={maxTotal} key={price} price={price} quantity={quantity} total={total} />)}
     </div>
 }
