@@ -3,7 +3,7 @@ import { Depth, KLine, Ticker, Trade } from "./types";
 import { basename } from "path";
 
 // const BASE_URL = "https://exchange-proxy.100xdevs.com/api/v1";
-const BASE_URL = "http://localhost:3000/api/v1";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL as string
 export async function placeOrder(market:string,userId:string,price:string,side:string,quantity:string){
          const response=await axios.post(`${BASE_URL}/order`,{price:price,side:side,quantity:quantity,market:market},{withCredentials:true});
 }
@@ -24,7 +24,7 @@ export async function getTickers(): Promise<Ticker[]> {
     const data=response.data;
     const markets=["SOL_USDC","BTC_USDC"]
     markets.forEach(market=>{
-        const exists=data.find(d=>market===d.symbol)
+        const exists=data.find((d:any)=>market===d.symbol)
         if(!exists)
             data.push({ "firstprice": "0",
                 "high":"0",

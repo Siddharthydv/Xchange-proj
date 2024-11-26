@@ -73,7 +73,7 @@ export function OpenOrders({market}:{market:string}){
         </thead>
         <tbody className="gap-10 divide-y divide-black">
             {data?.map(record=>{
-                return <tr className="  hover:bg-white/4">
+                return <tr key={record.orderid} className="  hover:bg-white/4">
                 {/* Asset Column */}
                 <td className="w-[5%] px-1 py-2 text-sm tabular-nums">
                     <a href="/trade/AAVE_USDC">

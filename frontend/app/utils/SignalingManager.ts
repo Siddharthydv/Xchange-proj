@@ -1,8 +1,8 @@
 import { Ticker, Trade } from "./types";
 
 // export const BASE_URL = "wss://ws.backpack.exchange/"
-export const BASE_URL = "ws://localhost:3001"
-
+export const BASE_URL = process.env.NEXT_PUBLIC_WS_BASE_URL as string
+console.log(BASE_URL)
 export class SignalingManager {
     private ws: WebSocket;
     private static instance: SignalingManager;
@@ -38,7 +38,7 @@ export class SignalingManager {
             console.log("type=",message);
             const type = message.data.e;
             if (this.callbacks[type]) {
-                this.callbacks[type].forEach(({ callback }) => {
+                this.callbacks[type].forEach(({ callback }:{callback:any}) => {
                     if (type === "ticker") {
                         const newTicker: Partial<Ticker> = {
                             lastprice: message.data.lastprice,
@@ -106,7 +106,7 @@ export class SignalingManager {
     async deRegisterCallback(type: string, id: string) {
         console.log('DEREG',this.callbacks)
         if (this.callbacks[type]) {
-            const index = this.callbacks[type].findIndex(callback => callback.id === id);
+            const index = this.callbacks[type].findIndex((callback:any) => callback.id === id);
             if (index !== -1) {
                 this.callbacks[type].splice(index, 1);
             }

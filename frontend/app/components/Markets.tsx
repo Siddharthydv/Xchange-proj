@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import SolImage from '../../public/sol.webp'
 export const Markets = () => {
   const [tickers, setTickers] = useState<Ticker[]>();
-
+  const c=0;
   useEffect(() => {
     async function A(){
     getTickers().then((m) => setTickers(m));
@@ -21,7 +21,7 @@ export const Markets = () => {
         <div className="flex flex-col w-full rounded-lg bg-baseBackgroundL1 px-5 py-3">
           <table className="w-full table-auto">
             <MarketHeader />
-            {tickers?.map((m) => <MarketRow market={m} />)}
+            {tickers?.map((m) => <MarketRow key={m.symbol} market={m} />)}
           </table>
         </div>
       </div>

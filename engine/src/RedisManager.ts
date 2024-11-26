@@ -33,7 +33,12 @@ export class RedisManager {
     private static instance: RedisManager;
 
     constructor() {
-        this.client = createClient();
+        this.client = createClient({
+            socket:{
+                host:process.env.REDIS_DOMAIN,
+                port:Number(process.env.REDIS_PORT)
+            }
+        });
         this.client.connect();
     }
 

@@ -11,7 +11,7 @@ export function Assets(){
             const response=await getAssets();
           
            console.log(response)
-            let temp:{ currency: string; available: any; locked: any; }[]=Object.entries(response).map(([currency,data])=>({
+            let temp:{ currency: string; available: any; locked: any; }[]=Object.entries(response).map(([currency,data]:[currency:any,data:any])=>({
                 currency,
                 available:data.available,
                 locked:data.available

@@ -1,9 +1,10 @@
+require('dotenv').config();
   const { Client } = require('pg');
 const client = new Client({
-  user: 'your_user',
-  host: 'localhost',
-  database: 'my_database',
-  password: 'your_password',
+  user: process.env.PG_USER,
+  host: process.env.HOST,
+  database: process.env.DATABASE as string,
+  password: process.env.PASSWORD,
   port: 5432,
 });
 
@@ -26,7 +27,7 @@ export async function orderTable() {
   }
 }
 export async function userTable(){
-  await client.connect();
+  
   const query=`
         DROP TABLE IF EXISTS userTable;
         CREATE TABLE IF NOT EXISTS userTable (
@@ -141,10 +142,10 @@ async function initializeTrade() {
 
 async function main() {
   try {
-    // await orderTable();
+    await orderTable();
     await userTable();
-    // await initializeDB();
-    // await initializeTrade();
+    await initializeDB();
+    await initializeTrade();
   } finally {
     await client.end();
     console.log("Database connection closed");

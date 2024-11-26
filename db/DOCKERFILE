@@ -1,0 +1,23 @@
+# Use an official Node.js image as the base image
+FROM node:16-slim
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json (if available) into the container
+COPY package*.json ./
+
+# Install dependencies inside the container
+RUN npm install --production
+
+# Copy the rest of the application code to the container
+COPY . .
+
+# Build the TypeScript code (using tsc)
+RUN npm run build
+
+# Expose the port (if your DB service is listening on a specific port)
+# EXPOSE 5432  # Replace with the actual port if needed
+
+# Set the command to run your app, usually the "start" script
+CMD ["npm", "run", "start:all"]

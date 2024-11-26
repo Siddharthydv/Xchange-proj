@@ -9,9 +9,21 @@ export class RedisManager {
     private static instance: RedisManager;
 
     private constructor() {
-        this.client = createClient();
+        this.client = createClient(
+            {
+                socket:{
+                    host:process.env.REDIS_DOMAIN,
+                    port:Number(process.env.REDIS_PORT)
+                }
+            }
+        );
         this.client.connect();
-        this.publisher = createClient();
+        this.publisher = createClient({
+                socket:{
+                    host:process.env.REDIS_DOMAIN,
+                    port:Number(process.env.REDIS_PORT)
+                }
+        });
         this.publisher.connect();
     }
 

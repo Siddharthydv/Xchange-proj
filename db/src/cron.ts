@@ -1,15 +1,15 @@
 import { Client } from 'pg'; 
 
 const client = new Client({
-    user: 'your_user',
-    host: 'localhost',
-    database: 'my_database',
-    password: 'your_password',
+    user: process.env.PG_USER,
+    host: process.env.HOST,
+    database: process.env.DATABASE as string,
+    password: process.env.PASSWORD,
     port: 5432,
 });
 client.connect();
 
-async function refreshViews() {
+export async function refreshViews() {
 
     await client.query('REFRESH MATERIALIZED VIEW SOL_klines_1m');
     await client.query('REFRESH MATERIALIZED VIEW SOL_klines_1h');

@@ -5,11 +5,11 @@ import { Client } from "pg";
 import { jwtVerify } from "../jwtVerify";
 export const orderRouter = Router();
 const client = new Client({
-    user: 'your_user',
-    host: 'localhost',
-    database: 'my_database',
-    password: 'your_password',
-    port: 5432,
+    user: process.env.PG_USER,
+    host: process.env.HOST,
+    database: process.env.DATABASE as string,
+    password: process.env.PASSWORD,
+    port: Number(process.env.PG_PORT),
 });
 client.connect();
 orderRouter.use(jwtVerify)

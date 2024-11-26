@@ -1,5 +1,8 @@
+require('dotenv').config();
 import express from "express";
 import cors from "cors";
+
+
 import { orderRouter } from "./routes/order";
 import { depthRouter } from "./routes/depth";
 import { tradesRouter } from "./routes/trades";
@@ -10,7 +13,7 @@ import { SignUp } from "./routes/SIgnUp";
 import cookieParser   from 'cookie-parser'
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:3002',  // Replace with your frontend URL
+    origin: [process.env.ALLOWED_BASE_URL as string,'http://localhost:3002'],  // Replace with your frontend URL
     credentials: true                   // Allow cookies and other credentials
   }));
 app.use(cookieParser())
@@ -23,6 +26,14 @@ app.use("/api/v1/klines", klineRouter);
 app.use("/api/v1/tickers", tickersRouter);
 app.post('/api/v1/signIn',signIn)
 app.post('/api/v1/signUp',SignUp)
-app.listen(3000, () => {
-    console.log("Server is running on port 3000");
+app.get('/dummy',(req,res)=>{
+  return   res.json("hello");
+
+})
+app.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`, process.env.USER,
+       process.env.HOST,
+       process.env.DATABASE as string,
+      process.env.PASSWORD,
+      Number(process.env.PG_PORT),);
 });

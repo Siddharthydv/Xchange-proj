@@ -44,7 +44,7 @@ const config: Config = {
     },
   },
   plugins: [
-    plugin(function ({ addUtilities }) {
+    plugin(function ({ addUtilities }:{addUtilities:any}) {
       addUtilities({
         '.scrollbar-none': {
           'scrollbar-width': 'none', // Firefox
