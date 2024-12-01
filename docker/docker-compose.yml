@@ -30,20 +30,16 @@ services:
       - default
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: DOCKERFILE
-      args:
-        NEXT_PUBLIC_BASE_URL: 'http://localhost/api/v1'                 #replace 'yourdomain.com' with 'IP of yur ec2'
-        NEXT_PUBLIC_WS_BASE_URL: 'ws://localhost:3001'
-    container_name: frontend
-    environment:
-      NEXT_PUBLIC_BASE_URL: 'http://localhost/api/v1'
-      NEXT_PUBLIC_WS_BASE_URL: 'ws://ws:3001'
-    depends_on:
-      - api
-    networks:
-      - default
+  image: callahaan/docker_frontend:latest  # Use the Docker Hub image
+  container_name: frontend
+  environment:
+    NEXT_PUBLIC_BASE_URL: 'http://localhost/api/v1'  # Update to match your API's public URL or EC2 IP
+    NEXT_PUBLIC_WS_BASE_URL: 'ws://localhost:3001'   # Update as needed
+  depends_on:
+    - api
+  networks:
+    - default
+
 
   api:
     build:
