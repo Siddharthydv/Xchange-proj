@@ -26,7 +26,7 @@ app.use("/api/v1/klines", klineRouter);
 app.use("/api/v1/tickers", tickersRouter);
 app.post('/api/v1/signIn',signIn)
 app.post('/api/v1/signUp',SignUp)
-app.get('/dummy',(req,res)=>{
+app.get('api/v1/dummy',(req,res)=>{
   return   res.json("hello");
 
 })

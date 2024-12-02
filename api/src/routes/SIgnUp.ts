@@ -11,6 +11,11 @@ const client = new Client({
   client.connect();
 export async function SignUp(req:Request,res:Response){
     const {username ,password,email}=req.body;
+   const checkquery='SELECT * FROM userTable WHERE email=$1';
+    const checkvalues=[email];
+    const emailregistered=await client.query(checkquery,checkvalues);
+    if(emailregistered.rows.length>0)
+      return res.json("User already exists")
     const query=`INSERT INTO userTable(username,password,email) 
                  VALUES($1,$2,$3)
                  RETURNING userId,username`;

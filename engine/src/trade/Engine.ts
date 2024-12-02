@@ -40,7 +40,7 @@ export class Engine {
         }
         setInterval(() => {
             this.saveSnapshot();
-        }, 1000 * 3);
+        }, 1000 * 10);
     }
 
     saveSnapshot() {

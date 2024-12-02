@@ -32,7 +32,7 @@ export async function userTable(){
         DROP TABLE IF EXISTS userTable;
         CREATE TABLE IF NOT EXISTS userTable (
         userId INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-        email VARCHAR(20) UNIQUE NOT NULL,
+        email VARCHAR(30) UNIQUE NOT NULL,
         username VARCHAR(20) NOT NULL,
         password VARCHAR(20) NOT NULL
   );`

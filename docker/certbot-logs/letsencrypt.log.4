@@ -1,0 +1,180 @@
+2024-12-02 11:17:17,301:DEBUG:certbot._internal.main:certbot version: 3.0.1
+2024-12-02 11:17:17,301:DEBUG:certbot._internal.main:Location of certbot entry point: /usr/local/bin/certbot
+2024-12-02 11:17:17,301:DEBUG:certbot._internal.main:Arguments: ['--webroot', '--webroot-path=/var/www/html', '--email', 'your-email@example.com', '--agree-tos', '--no-eff-email', '-d', 'xprojects.in']
+2024-12-02 11:17:17,301:DEBUG:certbot._internal.main:Discovered plugins: PluginsRegistry(PluginEntryPoint#manual,PluginEntryPoint#null,PluginEntryPoint#standalone,PluginEntryPoint#webroot)
+2024-12-02 11:17:17,313:DEBUG:certbot._internal.log:Root logging level set at 30
+2024-12-02 11:17:17,315:DEBUG:certbot._internal.plugins.selection:Requested authenticator webroot and installer None
+2024-12-02 11:17:17,315:DEBUG:certbot._internal.plugins.selection:Single candidate plugin: * webroot
+Description: Saves the necessary validation files to a .well-known/acme-challenge/ directory within the nominated webroot path. A separate HTTP server must be running and serving files from the webroot path. HTTP challenge only (wildcards not supported).
+Interfaces: Authenticator, Plugin
+Entry point: EntryPoint(name='webroot', value='certbot._internal.plugins.webroot:Authenticator', group='certbot.plugins')
+Initialized: <certbot._internal.plugins.webroot.Authenticator object at 0x7f427d8216a0>
+Prep: True
+2024-12-02 11:17:17,317:DEBUG:certbot._internal.plugins.selection:Selected authenticator <certbot._internal.plugins.webroot.Authenticator object at 0x7f427d8216a0> and installer None
+2024-12-02 11:17:17,317:INFO:certbot._internal.plugins.selection:Plugins selected: Authenticator webroot, Installer None
+2024-12-02 11:17:17,344:DEBUG:acme.client:Sending GET request to https://acme-v02.api.letsencrypt.org/directory.
+2024-12-02 11:17:17,345:DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): acme-v02.api.letsencrypt.org:443
+2024-12-02 11:17:18,143:DEBUG:urllib3.connectionpool:https://acme-v02.api.letsencrypt.org:443 "GET /directory HTTP/1.1" 200 746
+2024-12-02 11:17:18,144:DEBUG:acme.client:Received response:
+HTTP 200
+Server: nginx
+Date: Mon, 02 Dec 2024 11:17:18 GMT
+Content-Type: application/json
+Content-Length: 746
+Connection: keep-alive
+Cache-Control: public, max-age=0, no-cache
+X-Frame-Options: DENY
+Strict-Transport-Security: max-age=604800
+
+{
+  "7Ygj2fB-JbM": "https://community.letsencrypt.org/t/adding-random-entries-to-the-directory/33417",
+  "keyChange": "https://acme-v02.api.letsencrypt.org/acme/key-change",
+  "meta": {
+    "caaIdentities": [
+      "letsencrypt.org"
+    ],
+    "termsOfService": "https://letsencrypt.org/documents/LE-SA-v1.4-April-3-2024.pdf",
+    "website": "https://letsencrypt.org"
+  },
+  "newAccount": "https://acme-v02.api.letsencrypt.org/acme/new-acct",
+  "newNonce": "https://acme-v02.api.letsencrypt.org/acme/new-nonce",
+  "newOrder": "https://acme-v02.api.letsencrypt.org/acme/new-order",
+  "renewalInfo": "https://acme-v02.api.letsencrypt.org/draft-ietf-acme-ari-03/renewalInfo",
+  "revokeCert": "https://acme-v02.api.letsencrypt.org/acme/revoke-cert"
+}
+2024-12-02 11:17:18,144:DEBUG:acme.client:Requesting fresh nonce
+2024-12-02 11:17:18,145:DEBUG:acme.client:Sending HEAD request to https://acme-v02.api.letsencrypt.org/acme/new-nonce.
+2024-12-02 11:17:18,410:DEBUG:urllib3.connectionpool:https://acme-v02.api.letsencrypt.org:443 "HEAD /acme/new-nonce HTTP/1.1" 200 0
+2024-12-02 11:17:18,411:DEBUG:acme.client:Received response:
+HTTP 200
+Server: nginx
+Date: Mon, 02 Dec 2024 11:17:18 GMT
+Connection: keep-alive
+Cache-Control: public, max-age=0, no-cache
+Link: <https://acme-v02.api.letsencrypt.org/directory>;rel="index"
+Replay-Nonce: zIaIDaiTVqV3ORFUdx5KKjN9vh4FkjU_Rqwc1wqu9AAa60Eo1IQ
+X-Frame-Options: DENY
+Strict-Transport-Security: max-age=604800
+
+
+2024-12-02 11:17:18,411:DEBUG:acme.client:Storing nonce: zIaIDaiTVqV3ORFUdx5KKjN9vh4FkjU_Rqwc1wqu9AAa60Eo1IQ
+2024-12-02 11:17:18,411:DEBUG:acme.client:JWS payload:
+b'{\n  "contact": [\n    "mailto:your-email@example.com"\n  ],\n  "termsOfServiceAgreed": true\n}'
+2024-12-02 11:17:18,414:DEBUG:acme.client:Sending POST request to https://acme-v02.api.letsencrypt.org/acme/new-acct:
+{
+  "protected": "eyJhbGciOiAiUlMyNTYiLCAiandrIjogeyJuIjogIm5vRDRFc1FMSzBPZkVlZlZxMW1ZV1d2QXcwV2VRRUl4bjRLQ2VERmhMcE1WeGFVZThpSGdSZ0hpZXBrYzQ1ZUVZem85OVFhOEVHNml1RWxJVmtZOFA5QzJacE9fX2RPR1VfcHlsY25LTmhyZEpNSzYyQzkwc096VXByUnhjUGo2clNkUGhkR2p1d2d6MmhQMV9wSzJxUWJFSDltZWpPUFVxMDNPNk1samJHZlF1YXNjZ0hjQUNyNnRhM2FNdnZpV2RKZUZkWEhKZno1VWRaeVpHUnNrZWlNNWl2M1ltVFh1bUZhMW9ZaFJjd3FpMjItSnFjUllvbGNxUjZaTW9VTUJ5UWJlZFpyVkxSMjBOa2oycTg2VkV0RWRXdmhEcnFuNFNCWUlSMGtjd1g4VjN5ZjZpRDg2OWJadWdxX09qQXJDMm9QcWd2VWk1dFNrSTdOY19YNGNaUSIsICJlIjogIkFRQUIiLCAia3R5IjogIlJTQSJ9LCAibm9uY2UiOiAieklhSURhaVRWcVYzT1JGVWR4NUtLak45dmg0RmtqVV9ScXdjMXdxdTlBQWE2MEVvMUlRIiwgInVybCI6ICJodHRwczovL2FjbWUtdjAyLmFwaS5sZXRzZW5jcnlwdC5vcmcvYWNtZS9uZXctYWNjdCJ9",
+  "signature": "LQqG62IZCYAfYM3c3oOi_HQxdkzXqc87NF9pWiMhboqN-hQe1HYYJd1dUTh5Zio4k7eqDR9yC0MpGju9jLXtyN5heg9lr28s0EQ0RRBPHMX1EgpuXqGKi2-_VZbS1EbkYJdLICI_ez-VXqo6aTDP3gvlwwqlxfXVb6Le7gVDKKxeQSKDDIS4pliuOVM-_47wGgJu7BZr_h1gg1cPOVorJEVGt7F2PX1i3E1U3SzE6i_IOaTK7rjg9dTy-Etxb0vGbVgiGJkHFze9lmTN42_NepGEw8l7xgHZ4N1gyh8llt9aVJWe6kmdwZHpJTc8cDIA8-zJQd-vMtB4iUV6YuOoZA",
+  "payload": "ewogICJjb250YWN0IjogWwogICAgIm1haWx0bzp5b3VyLWVtYWlsQGV4YW1wbGUuY29tIgogIF0sCiAgInRlcm1zT2ZTZXJ2aWNlQWdyZWVkIjogdHJ1ZQp9"
+}
+2024-12-02 11:17:18,721:DEBUG:urllib3.connectionpool:https://acme-v02.api.letsencrypt.org:443 "POST /acme/new-acct HTTP/1.1" 400 185
+2024-12-02 11:17:18,722:DEBUG:acme.client:Received response:
+HTTP 400
+Server: nginx
+Date: Mon, 02 Dec 2024 11:17:18 GMT
+Content-Type: application/problem+json
+Content-Length: 185
+Connection: keep-alive
+Cache-Control: public, max-age=0, no-cache
+Link: <https://acme-v02.api.letsencrypt.org/directory>;rel="index"
+Replay-Nonce: zIaIDaiTLSp1VBxzZ2qhTu11nEE7emSUAyOYMKfdsipUDfIrA0o
+
+{
+  "type": "urn:ietf:params:acme:error:invalidContact",
+  "detail": "Error creating new account :: invalid contact domain. Contact emails @example.com are forbidden",
+  "status": 400
+}
+2024-12-02 11:17:24,114:DEBUG:certbot._internal.main:
+Traceback (most recent call last):
+  File "/opt/certbot/src/certbot/certbot/_internal/client.py", line 255, in perform_registration
+    return acme.new_account(messages.NewRegistration.from_data(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/acme/acme/client.py", line 61, in new_account
+    response = self._post(self.directory['newAccount'], new_account)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/acme/acme/client.py", line 365, in _post
+    return self.net.post(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/acme/acme/client.py", line 738, in post
+    return self._post_once(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/acme/acme/client.py", line 751, in _post_once
+    response = self._check_response(response, content_type=content_type)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/acme/acme/client.py", line 602, in _check_response
+    raise messages.Error.from_json(jobj)
+acme.messages.Error: urn:ietf:params:acme:error:invalidContact :: The provided contact URI was invalid :: Error creating new account :: invalid contact domain. Contact emails @example.com are forbidden
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/certbot/src/certbot/certbot/_internal/main.py", line 740, in _determine_account
+    acc, acme = client.register(
+                ^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/certbot/certbot/_internal/client.py", line 209, in register
+    regr = perform_registration(acme, config, tos_cb)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/certbot/certbot/_internal/client.py", line 264, in perform_registration
+    config.email = display_ops.get_email(invalid=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/certbot/certbot/display/ops.py", line 63, in get_email
+    raise errors.Error(
+certbot.errors.Error: An e-mail address or --register-unsafely-without-email must be provided.
+2024-12-02 11:17:24,118:DEBUG:certbot._internal.log:Exiting abnormally:
+Traceback (most recent call last):
+  File "/opt/certbot/src/certbot/certbot/_internal/client.py", line 255, in perform_registration
+    return acme.new_account(messages.NewRegistration.from_data(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/acme/acme/client.py", line 61, in new_account
+    response = self._post(self.directory['newAccount'], new_account)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/acme/acme/client.py", line 365, in _post
+    return self.net.post(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/acme/acme/client.py", line 738, in post
+    return self._post_once(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/acme/acme/client.py", line 751, in _post_once
+    response = self._check_response(response, content_type=content_type)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/acme/acme/client.py", line 602, in _check_response
+    raise messages.Error.from_json(jobj)
+acme.messages.Error: urn:ietf:params:acme:error:invalidContact :: The provided contact URI was invalid :: Error creating new account :: invalid contact domain. Contact emails @example.com are forbidden
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/certbot/src/certbot/certbot/_internal/main.py", line 740, in _determine_account
+    acc, acme = client.register(
+                ^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/certbot/certbot/_internal/client.py", line 209, in register
+    regr = perform_registration(acme, config, tos_cb)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/certbot/certbot/_internal/client.py", line 264, in perform_registration
+    config.email = display_ops.get_email(invalid=True)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/certbot/certbot/display/ops.py", line 63, in get_email
+    raise errors.Error(
+certbot.errors.Error: An e-mail address or --register-unsafely-without-email must be provided.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/bin/certbot", line 33, in <module>
+    sys.exit(load_entry_point('certbot', 'console_scripts', 'certbot')())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/certbot/certbot/main.py", line 19, in main
+    return internal_main.main(cli_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/certbot/certbot/_internal/main.py", line 1876, in main
+    return config.func(config, plugins)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/certbot/certbot/_internal/main.py", line 1560, in certonly
+    le_client = _init_le_client(config, auth, installer)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/certbot/certbot/_internal/main.py", line 832, in _init_le_client
+    acc, acme = _determine_account(config)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/certbot/src/certbot/certbot/_internal/main.py", line 753, in _determine_account
+    raise errors.Error(
+certbot.errors.Error: Unable to register an account with ACME server. An e-mail address or --register-unsafely-without-email must be provided.
+2024-12-02 11:17:24,121:ERROR:certbot._internal.log:Unable to register an account with ACME server. An e-mail address or --register-unsafely-without-email must be provided.

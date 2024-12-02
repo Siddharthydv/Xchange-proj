@@ -30,7 +30,8 @@ async function main() {
 
     while (true) {
         const response = await redisClient.rPop("db_processor" as string)
-        if (!response) {
+       try{
+       	if (!response) {
 
         }  else {
             const data: DbMessage = JSON.parse(response);
@@ -60,7 +61,8 @@ async function main() {
                    await updateOrders(pgClient,orderData);
             }
         }
-    }
+       }catch(e){console.log(e)};
+       }
 
 }
 

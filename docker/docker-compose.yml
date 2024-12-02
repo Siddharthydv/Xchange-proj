@@ -30,16 +30,15 @@ services:
       - default
 
   frontend:
-  image: callahaan/docker_frontend:latest  # Use the Docker Hub image
-  container_name: frontend
-  environment:
-    NEXT_PUBLIC_BASE_URL: 'http://localhost/api/v1'  # Update to match your API's public URL or EC2 IP
-    NEXT_PUBLIC_WS_BASE_URL: 'ws://localhost:3001'   # Update as needed
-  depends_on:
-    - api
-  networks:
-    - default
-
+    image: callahaan/docker_frontend:latest  # Use the Docker Hub image
+    container_name: frontend
+    environment:
+      NEXT_PUBLIC_BASE_URL: 'https://xprojects.in/api/v1'  # Update to match your API's public URL or EC2 IP
+      NEXT_PUBLIC_WS_BASE_URL: 'wss://xprojects.in:3001'   # Update as needed
+    depends_on:
+      - api
+    networks:
+      - default
 
   api:
     build:
@@ -49,7 +48,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      ALLOWED_BASE_URL: 'http://localhost'                             #replace yourdomain with IP of yoru ec2
+      ALLOWED_BASE_URL: 'xprojects.in'                             #replace yourdomain with IP of yoru ec2
       PORT: 3000
       REDIS_DOMAIN: redis
       REDIS_PORT: 6379
@@ -74,13 +73,25 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      # - ./certs:/etc/ssl/certs:ro # Mount SSL certificates
-      # - ./keys:/etc/ssl/private:ro # Mount SSL private keys
+      - ./nginx:/var/www/html
+      - ./certs:/etc/letsencrypt:ro
     depends_on:
       - frontend
       - api
     networks:
       - default
+ 
+  certbot:
+    image: certbot/certbot:latest
+    container_name: certbot
+    volumes:
+      - ./certs:/etc/letsencrypt  # SSL certificates
+      - ./certbot-logs:/var/log/letsencrypt # Logs
+      - ./nginx:/var/www/html  # For nginx webroot validation
+    networks:
+      - default
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 1; done'"
+
 
   engine:
     build:
@@ -135,3 +146,6 @@ networks:
 
 volumes:
   timescale-data:
+  certbot-logs:
+  certs:
+  nginx:
